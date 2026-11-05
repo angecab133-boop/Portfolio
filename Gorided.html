@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>GoRide</title>
+  <style>
+:root {
+  --bg: #f3f5f1;
+  --ink: #17211c;
+  --mut: #68736d;
+  --line: #e0e5df;
+  --pine: #1d5c46;
+  --amb: #f4b52c;
+  --red: #c0392b;
+  --r: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html,body {
+  height: 100%;
+}
+
+body {
+  font: 15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background: #dce3db;
+  color: var(--ink);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#app {
+  position: relative;
+  width: min(400px,100%);
+  height: min(820px,100%);
+  background: var(--bg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px #0003;
+}
+
+@media(max-width:440px) {
+  #app {
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+.s {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  overflow: auto;
+}
+
+.s.on {
+  display: flex;
+}
+
+.sp {
+  flex: 1;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+}
+
+.hd h2 {
+  flex: 1;
+  font-size: 18px;
+}
+
+h1 {
+  font-size: 22px;
+}
+
+h3 {
+  font-size: 14px;
+  color: var(--mut);
+  font-weight: 600;
+}
+
+small,.mut {
+  color: var(--mut);
+  font-size: 13px;
+  display: block;
+}
+
+.i {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+
+.ib {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.dot {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--amb);
+  border: 2px solid #fff;
+  display: none;
+}
+
+.brand {
+  flex: 1;
+  text-align: center;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: .3px;
+}
+
+.c {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 12px 14px;
+}
+
+.rw {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.rw b,.drv b {
+  display: block;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.f {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--mut);
+  font-weight: 600;
+}
+
+input,textarea {
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  width: 100%;
+  background: #fff;
+}
+
+input:focus,textarea:focus {
+  border-color: var(--pine);
+}
+
+:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.er {
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 18px;
+}
+
+.b {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  font: inherit;
+  font-weight: 700;
+  background: var(--pine);
+  color: #fff;
+  cursor: pointer;
+}
+
+.b.o {
+  background: #fff;
+  color: var(--pine);
+  border: 1.5px solid var(--pine);
+}
+
+.b:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.b:active {
+  transform: translateY(1px);
+}
+
+.lk {
+  background: none;
+  border: 0;
+  color: var(--pine);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
+.or {
+  text-align: center;
+  color: var(--mut);
+  font-size: 13px;
+}
+
+.lg {
+  text-align: center;
+}
+
+.lg b {
+  display: block;
+  font-size: 26px;
+  letter-spacing: .3px;
+  margin-top: 4px;
+}
+
+.seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #e5eae4;
+  border-radius: 12px;
+  padding: 3px;
+}
+
+.tab {
+  border: 0;
+  background: none;
+  padding: 9px;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--mut);
+  cursor: pointer;
+}
+
+.tab.on {
+  background: #fff;
+  color: var(--ink);
+}
+
+.map {
+  border-radius: var(--r);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.map svg {
+  display: block;
+  width: 100%;
+}
+
+.srch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r);
+  padding: 15px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+
+.drv {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.av {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--pine);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  flex: none;
+}
+
+.stop {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 5px 0;
+}
+
+.stop b {
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.dt {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex: none;
+}
+
+.dt.p {
+  background: var(--pine);
+}
+
+.dt.d {
+  background: var(--amb);
+  outline: 2px solid #17211c33;
+}
+
+.opt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r);
+  padding: 14px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  width: 100%;
+}
+
+.opt.sel {
+  border-color: var(--pine);
+  background: #eaf3ee;
+  box-shadow: inset 0 0 0 1px var(--pine);
+}
+
+.pr {
+  font-size: 17px;
+}
+
+.eta {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.pulse {
+  animation: p 1s infinite alternate;
+}
+
+@keyframes p {
+  to {
+    opacity: .45;
+  }
+}
+
+.tg {
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 99px;
+  padding: 3px 9px;
+  background: #e5eae4;
+  white-space: nowrap;
+}
+
+.tg.Completed {
+  background: #dcefe4;
+  color: var(--pine);
+}
+
+.tg.Scheduled {
+  background: #fdf0cf;
+  color: #8a6200;
+}
+
+.tg.Cancelled {
+  background: #f6dedb;
+  color: var(--red);
+}
+
+.act {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  border-color: var(--amb);
+  background: #fff8e6;
+  cursor: pointer;
+}
+
+.chips {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.chip {
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  padding: 8px 13px;
+  font: inherit;
+  font-weight: 600;
+  background: #fff;
+  cursor: pointer;
+}
+
+.chip.sel {
+  background: var(--pine);
+  border-color: var(--pine);
+  color: #fff;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  font-size: 46px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.st {
+  background: linear-gradient(90deg,var(--amb) var(--f,0%),#fff 0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 2px #d9a21b;
+}
+
+nav {
+  display: none;
+  justify-content: space-around;
+  background: #fff;
+  border-top: 1px solid var(--line);
+  padding: 6px 0 max(6px,env(safe-area-inset-bottom));
+}
+
+nav.on {
+  display: flex;
+}
+
+nav button {
+  background: none;
+  border: 0;
+  color: var(--mut);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 24px;
+  cursor: pointer;
+}
+
+nav button.a {
+  color: var(--pine);
+}
+
+#toast {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 14px;
+  background: var(--ink);
+  color: #fff;
+  padding: 11px 14px;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity .25s;
+  pointer-events: none;
+  text-align: center;
+  z-index: 30;
+  font-weight: 600;
+}
+
+#toast.on {
+  opacity: 1;
+}
+
+#ov {
+  position: absolute;
+  inset: 0;
+  background: #0007;
+  display: none;
+  align-items: flex-end;
+  z-index: 20;
+}
+
+#ov.on {
+  display: flex;
+}
+
+#sh {
+  background: #fff;
+  width: 100%;
+  border-radius: 22px 22px 0 0;
+  padding: 20px 18px max(20px,env(safe-area-inset-bottom));
+  max-height: 85%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#sh h3 {
+  color: var(--ink);
+  font-size: 17px;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.m {
+  background: #eef1ed;
+  border-radius: 14px;
+  padding: 8px 12px;
+  max-width: 80%;
+  align-self: flex-start;
+}
+
+.m.me {
+  background: var(--pine);
+  color: #fff;
+  align-self: flex-end;
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .pulse {
+    animation: none;
+  }
+  #toast {
+    transition: none;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="toast" role="status"></div>
+    <section class="s on" id="login">
+      <div class="sp"></div>
+      <div class="lg">
+        <svg viewBox="0 0 100 80" width="76" aria-hidden="true"><path d="M22 8h56l8 24h6v8h-4v26a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4v-4H32v4a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4V40h-4v-8h6z" fill="#1d5c46"/><path d="M28 14h44l5 16H23z" fill="#fff"/><rect x="24" y="42" width="14" height="7" rx="3" fill="#f4b52c"/><rect x="62" y="42" width="14" height="7" rx="3" fill="#f4b52c"/></svg>
+        <b>GoRide</b>
+      </div>
+      <div class="seg">
+        <button class="tab on">Log in</button>
+        <button class="tab">Register</button>
+      </div>
+      <label class="f" style="display:none">
+        Full name
+        <input id="nm" autocomplete="name">
+      </label>
+      <div id="roles" style="display:none">
+        <h3 style="text-align:center;margin-bottom:6px">Register as</h3>
+        <div class="chips">
+          <button class="chip sel" data-role="passenger">Passenger</button>
+          <button class="chip" data-role="driver">Driver</button>
+        </div>
+      </div>
+      <label class="f">
+        Phone number / Email
+        <input id="u" autocomplete="username">
+      </label>
+      <label class="f">
+        Password
+        <input id="pw" type="password" autocomplete="current-password">
+      </label>
+      <div class="er" id="le" role="alert"></div>
+      <button class="b" id="li">Log in</button>
+      <div class="or">or</div>
+      <label class="f" id="gw" style="display:none">
+        Your Google email
+        <input id="ge" type="email">
+      </label>
+      <button class="b o" id="gg">Continue with Google</button>
+      <div class="sp"></div>
+    </section>
+    <section class="s" id="home">
+      <div class="hd">
+        <button class="ib" id="bell" aria-label="Notifications">
+          <i data-i="bell"></i>
+          <span class="dot" id="dot"></span>
+        </button>
+        <span class="brand">GoRide</span>
+        <button class="ib" id="mn" aria-label="Menu">
+          <i data-i="menu"></i>
+        </button>
+      </div>
+      <h1 id="hi"></h1>
+      <div class="map" id="mapH"></div>
+      <div id="act"></div>
+      <div class="sp"></div>
+      <button class="srch" id="wtg">
+        <i data-i="search"></i>
+        Where to go?
+      </button>
+    </section>
+    <section class="s" id="loc">
+      <div class="hd">
+        <button class="ib" data-b="home" aria-label="Back">
+          <i data-i="back"></i>
+        </button>
+        <h2>Pick up / Destination</h2>
+      </div>
+      <div class="map" id="mapL"></div>
+      <div class="c col">
+        <label class="f">
+          Pick up location
+          <input id="pk" list="pl" autocomplete="off">
+        </label>
+        <label class="f">
+          Destination
+          <input id="ds" list="pl" placeholder="Type a place in Baguio" autocomplete="off">
+        </label>
+      </div>
+      <datalist id="pl"></datalist>
+      <div class="er" id="lerr" role="alert"></div>
+      <div class="mut" id="ld"></div>
+      <div class="sp"></div>
+      <button class="b" id="cl">Confirm Location</button>
+    </section>
+    <section class="s" id="type">
+      <div class="hd">
+        <button class="ib" data-b="loc" aria-label="Back">
+          <i data-i="back"></i>
+        </button>
+        <h2>Ride type</h2>
+      </div>
+      <div class="c" id="tsum"></div>
+      <h3>Choose ride type</h3>
+      <div class="col" id="opts"></div>
+      <div class="sp"></div>
+      <button class="b" id="ct" disabled>Continue</button>
+    </section>
+    <section class="s" id="conf">
+      <div class="hd">
+        <button class="ib" data-b="type" aria-label="Back">
+          <i data-i="back"></i>
+        </button>
+        <h2>Booking Confirmation</h2>
+      </div>
+      <div class="c drv" id="cdrv"></div>
+      <div class="c" id="croute"></div>
+      <div class="c rw" id="cride"></div>
+      <div class="c rw" id="cpay"></div>
+      <div class="sp"></div>
+      <button class="b" id="cr">Confirm Ride</button>
+      <div class="or">or</div>
+      <button class="b o" id="sr">Schedule Ride</button>
+    </section>
+    <section class="s" id="sched">
+      <div class="hd">
+        <button class="ib" data-b="conf" aria-label="Back">
+          <i data-i="back"></i>
+        </button>
+        <h2>Schedule Ride</h2>
+      </div>
+      <div class="c row2">
+        <label class="f">
+          Date
+          <input type="date" id="dt">
+        </label>
+        <label class="f">
+          Time
+          <input type="time" id="tm">
+        </label>
+      </div>
+      <div class="c" id="sroute"></div>
+      <div class="c rw" id="sride"></div>
+      <div class="er" id="se" role="alert"></div>
+      <div class="sp"></div>
+      <button class="b" id="ss">Schedule Ride</button>
+    </section>
+    <section class="s" id="track">
+      <div class="hd">
+        <button class="ib" data-b="home" aria-label="Back">
+          <i data-i="back"></i>
+        </button>
+        <h2>Live Tracking</h2>
+      </div>
+      <div class="map" id="mapT"></div>
+      <div class="c">
+        <div class="eta" id="eta"></div>
+        <small id="sub"></small>
+      </div>
+      <div class="c drv" id="tdrv" style="display:none"></div>
+      <div class="row2" id="tbtn" style="display:none">
+        <button class="b o" id="call">Call</button>
+        <button class="b o" id="msg">Message</button>
+      </div>
+      <div class="sp"></div>
+      <button class="lk" id="cx">Cancel ride</button>
+    </section>
+    <section class="s" id="pay">
+      <div class="hd">
+        <button class="ib" data-b="home" aria-label="Back">
+          <i data-i="back"></i>
+        </button>
+        <h2>Payment and Rides</h2>
+      </div>
+      <h3>Payment Method</h3>
+      <div class="c rw" id="pm"></div>
+      <h3>Ride Summary</h3>
+      <div class="c" id="sum"></div>
+      <button class="b" id="rr" style="display:none">Rate your ride</button>
+      <h3>Recent Rides</h3>
+      <div class="col" id="hist"></div>
+    </section>
+    <section class="s" id="rate">
+      <div class="hd">
+        <button class="ib" data-b="pay" aria-label="Back">
+          <i data-i="back"></i>
+        </button>
+        <h2>Rate Your Ride</h2>
+      </div>
+      <div class="c drv" id="rdrv"></div>
+      <h3 style="text-align:center">Your Rating</h3>
+      <div class="stars" id="stars" aria-label="Tap a star to rate"></div>
+      <div class="chips" id="tags">
+        <button class="chip">Polite</button>
+        <button class="chip">On Time</button>
+        <button class="chip">Clean Car</button>
+        <button class="chip">Safe Driving</button>
+      </div>
+      <textarea id="cm" rows="2" placeholder="Add a comment…"></textarea>
+      <h3 style="text-align:center">Tip your driver</h3>
+      <div class="chips" id="tips">
+        <button class="chip" data-v="50">₱50</button>
+        <button class="chip" data-v="75">₱75</button>
+        <button class="chip" data-v="100">₱100</button>
+        <button class="chip" data-v="c">Custom</button>
+      </div>
+      <input id="ct2" type="number" min="1" placeholder="Tip amount in ₱" style="display:none">
+      <div class="er" id="re" role="alert"></div>
+      <div class="sp"></div>
+      <button class="b" id="sb">Submit Rating</button>
+    </section>
+    <section class="s" id="dhome">
+      <div class="hd">
+        <span class="brand">GoRide Driver</span>
+      </div>
+      <h1 id="dhi"></h1>
+      <div class="map" id="mapD"></div>
+      <div class="c rw">
+        <div>
+          <b id="dst"></b>
+          <small id="dsub"></small>
+        </div>
+        <button class="b" id="don">Go online</button>
+      </div>
+      <div id="req"></div>
+      <div class="sp"></div>
+    </section>
+    <section class="s" id="dnav">
+      <div class="hd">
+        <h2>Navigate to Passenger</h2>
+      </div>
+      <div class="map" id="mapN"></div>
+      <div class="c">
+        <div class="eta" id="neta"></div>
+        <small id="nsub"></small>
+      </div>
+      <div class="c drv" id="npass"></div>
+      <div class="sp"></div>
+      <button class="b" id="ndone" disabled>Complete Ride</button>
+    </section>
+    <section class="s" id="dearn">
+      <div class="hd">
+        <h2>Earnings</h2>
+      </div>
+      <div class="c" id="etot"></div>
+      <h3>Completed Rides</h3>
+      <div class="col" id="elist"></div>
+    </section>
+    <section class="s" id="prof">
+      <div class="hd">
+        <h2>Profile</h2>
+      </div>
+      <div class="c drv" id="pinfo"></div>
+      <div class="c rw" id="ppm"></div>
+      <div class="c rw" id="pcnt"></div>
+      <div class="sp"></div>
+      <button class="b o" id="lo">Log out</button>
+    </section>
+    <nav id="nav">
+      <button data-n="home">
+        <i data-i="home"></i>
+        Home
+      </button>
+      <button data-n="pay">
+        <i data-i="clock"></i>
+        Rides
+      </button>
+      <button data-n="prof">
+        <i data-i="user"></i>
+        Profile
+      </button>
+    </nav>
+    <nav id="navD">
+      <button data-n="dhome">
+        <i data-i="home"></i>
+        Requests
+      </button>
+      <button data-n="dearn">
+        <i data-i="clock"></i>
+        Earnings
+      </button>
+      <button data-n="prof">
+        <i data-i="user"></i>
+        Profile
+      </button>
+    </nav>
+    <div id="ov">
+      <div id="sh" role="dialog"></div>
+    </div>
+  </div>
+
+  <script>
+    const $ = function (id) {
+      return document.getElementById(id);
+    };
+
+    const Q = function (selector, root = document) {
+      return [...root.querySelectorAll(selector)];
+    };
+
+    function esc(text) {
+      const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+      return String(text).replace(/[&<>"']/g, function (c) {
+        return map[c];
+      });
+    }
+
+    const ICONS = {
+      back: '<path d="M15 5l-7 7 7 7"/>',
+      menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+      bell: '<path d="M6 17h12l-1.5-2v-5a4.5 4.5 0 0 0-9 0v5zM10 20a2 2 0 0 0 4 0"/>',
+      search: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
+      home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>',
+      clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+      user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20c0-4 3.5-6 7.5-6s7.5 2 7.5 6"/>'
+    };
+
+    Q("[data-i]").forEach(function (el) {
+      el.outerHTML = `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS[el.dataset.i]}</svg>`;
+    });
+
+    const memory = {};
+    const st = {
+      get(key) {
+        try {
+          return JSON.parse(localStorage.getItem(key));
+        } catch (e) {
+          return memory[key] ?? null;
+        }
+      },
+      set(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+          memory[key] = value;
+        }
+      }
+    };
+
+    const PLACES = {
+      "Baguio City Hall": 1,
+      "Burnham Park": 1,
+      "Session Road": 1,
+      "Baguio Cathedral": 1,
+      "Baguio City Public Market": 1,
+      "SM Baguio City Market": 2,
+      "SM City Baguio": 2,
+      "Mines View Park": 3,
+      "The Mansion": 3,
+      "Botanical Garden": 3,
+      "Wright Park": 3,
+      "Camp John Hay": 4,
+      "BenCab Museum": 6
+    };
+
+    const PL = {};
+    for (const name in PLACES) {
+      PL[name.toLowerCase()] = PLACES[name];
+    }
+
+    let placeOptions = "";
+    for (const name in PLACES) {
+      placeOptions += `<option value="${name}">`;
+    }
+    $("pl").innerHTML = placeOptions;
+
+    const TY = {
+      Motorcycle: {
+        s: 1, b: 40, k: 25,
+        d: "Fastest way through traffic",
+        v: "Honda Click · 143 LUV",
+        icon: '<circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l4-6h5l3 6M10 10L8.5 7H7M14 7h2.5"/>'
+      },
+      Car: {
+        s: 4, b: 75, k: 50,
+        d: "Comfortable ride for small groups",
+        v: "Toyota Vios · LUV 143",
+        icon: '<path d="M3 15v-3l2-5h14l2 5v3z"/><circle cx="7.5" cy="17" r="1.8"/><circle cx="16.5" cy="17" r="1.8"/>'
+      },
+      Van: {
+        s: 8, b: 120, k: 70,
+        d: "Extra space for big groups",
+        v: "Toyota HiAce · LUV 143",
+        icon: '<path d="M2.5 16V7h11v9M13.5 10h4l3 3.5V16h-7"/><circle cx="7" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.8"/>'
+      }
+    };
+
+    function seatText(count) {
+      if (count == 1) {
+        return "1 seat";
+      }
+      return count + " seats";
+    }
+
+    const DRV = { n: "Mingyu Salazar", r: 4.5 };
+    const DEF = "#67 Rainbow street Dreamland Subdivision";
+
+    const RD = [[250, 30], [250, 100], [140, 100], [140, 140], [70, 140]];
+    const RT = [[70, 140], [70, 70], [170, 70], [170, 40], [240, 40]];
+
+    let U;
+    let D;
+    let P = { pick: DEF, dest: "", type: "", km: 0 };
+    let R = null;
+    let iv;
+    let T = [];
+    let rv = 0;
+    let rid = 0;
+    let reg = false;
+
+    function placeDistance(name) {
+      name = name.trim().toLowerCase();
+      if (name == DEF.toLowerCase()) return 0;
+      if (PL[name] != null) return PL[name];
+      let h = 0;
+      for (const c of name) {
+        h = (h * 31 + c.charCodeAt(0)) % 97;
+      }
+      return 1 + h % 6;
+    }
+
+    function tripKm(a, b) {
+      return Math.max(1, Math.abs(placeDistance(a) - placeDistance(b)));
+    }
+
+    function fare(type, km = P.km) {
+      return TY[type].b + TY[type].k * km;
+    }
+
+    function pmL() {
+      return D.pm.label;
+    }
+
+    function save() {
+      st.set("gr_d_" + U.id, D);
+    }
+
+    function when(time) {
+      return new Date(time).toLocaleString("en-PH", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+    }
+
+    function clearT() {
+      clearInterval(iv);
+      T.forEach(clearTimeout);
+      T = [];
+    }
+
+    function setT(fn, ms) {
+      T.push(setTimeout(fn, ms));
+    }
+
+    let toastTimer;
+    function toast(message) {
+      const t = $("toast");
+      t.textContent = message;
+      t.classList.add("on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () {
+        t.classList.remove("on");
+      }, 2400);
+    }
+
+    function note(message) {
+      D.notes.unshift({ m: message, w: Date.now() });
+      D.notes = D.notes.slice(0, 30);
+      D.unread = (D.unread || 0) + 1;
+      save();
+    }
+
+    function sheet(html) {
+      $("sh").innerHTML = html;
+      $("ov").classList.add("on");
+    }
+
+    function shut() {
+      $("ov").classList.remove("on");
+    }
+
+    $("ov").onclick = function (e) {
+      if (e.target == $("ov")) shut();
+    };
+
+    document.onkeydown = function (e) {
+      if (e.key == "Escape") shut();
+    };
+
+    function ask(message, yesText, onYes) {
+      sheet(`<h3>${message}</h3><div class="row2"><button class="b o" id="n0">Keep</button><button class="b" id="y0">${yesText}</button></div>`);
+      $("n0").onclick = shut;
+      $("y0").onclick = function () {
+        shut();
+        onYes();
+      };
+    }
+
+    function MAP(content) {
+      let streets = "";
+      for (const y of [40, 70, 100, 140]) {
+        streets += `<path d="M0 ${y}H300"/>`;
+      }
+      for (const x of [70, 140, 170, 250]) {
+        streets += `<path d="M${x} 0V200"/>`;
+      }
+      return `<svg viewBox="0 0 300 200" role="img" aria-label="Map"><rect width="300" height="200" fill="#e6ede5"/><rect x="85" y="106" width="45" height="26" rx="6" fill="#cfe0cc"/><g stroke="#fff" stroke-width="9" fill="none">${streets}</g>${content}</svg>`;
+    }
+
+    function pin(x, y, color, label) {
+      let text = "";
+      if (label) {
+        text = `<text y="-14" text-anchor="middle" font-size="11" font-weight="700" fill="#17211c" stroke="#fff" stroke-width="3" paint-order="stroke">${label}</text>`;
+      }
+      return `<g transform="translate(${x} ${y})"><circle r="8" fill="${color}" stroke="#fff" stroke-width="3"/>${text}</g>`;
+    }
+
+    function rt(route) {
+      return `<polyline points="${route.join(" ")}" fill="none" stroke="#1d5c46" stroke-width="3.5" stroke-dasharray="7 6" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+
+    function veh(x, y) {
+      return `<g id="veh" transform="translate(${x} ${y})"><circle r="9" fill="#17211c" stroke="#fff" stroke-width="3"/><text y="-15" text-anchor="middle" font-size="11" font-weight="700" fill="#17211c" stroke="#fff" stroke-width="3" paint-order="stroke">Driver</text></g>`;
+    }
+
+    function anim(route, ms, tick, done) {
+      clearInterval(iv);
+
+      const lengths = [];
+      let total = 0;
+      for (let i = 1; i < route.length; i++) {
+        const len = Math.hypot(route[i][0] - route[i - 1][0], route[i][1] - route[i - 1][1]);
+        lengths.push(len);
+        total += len;
+      }
+
+      const startTime = Date.now();
+      iv = setInterval(function () {
+        const t = Math.min(1, (Date.now() - startTime) / ms);
+
+        let dist = t * total;
+        let i = 0;
+        while (i < lengths.length - 1 && dist > lengths[i]) {
+          dist -= lengths[i];
+          i++;
+        }
+
+        const f = Math.min(1, dist / lengths[i]);
+        const x = route[i][0] + (route[i + 1][0] - route[i][0]) * f;
+        const y = route[i][1] + (route[i + 1][1] - route[i][1]) * f;
+
+        const car = $("veh");
+        if (car) car.setAttribute("transform", `translate(${x} ${y})`);
+
+        tick(t);
+
+        if (t >= 1) {
+          clearInterval(iv);
+          done();
+        }
+      }, 60);
+    }
+
+    let J = null, req = null, online = false, regRole = "passenger";
+    const NAMES = ["Ana Reyes", "Joel Santos", "Mia Cruz", "Ken Dizon", "Liza Bautista"];
+
+    const RN = {
+      dhome: rDHome,
+      dearn: rEarn,
+      dnav: rNav,
+      home: rHome,
+      loc: rLoc,
+      type: rType,
+      conf: rConf,
+      sched: rSched,
+      pay: rPay,
+      rate: rRate,
+      prof: rProf
+    };
+
+    function go(id) {
+      Q(".s").forEach(function (s) {
+        s.classList.toggle("on", s.id == id);
+      });
+
+      const isDriver = U && U.role == "driver";
+      $("nav").classList.toggle("on", !isDriver && id != "login" && id != "rate");
+      $("navD").classList.toggle("on", !!isDriver && id != "login" && id != "dnav");
+
+      let active = "home";
+      if (id == "pay" || id == "prof" || id == "dhome" || id == "dearn") {
+        active = id;
+      }
+      Q("nav button").forEach(function (b) {
+        b.classList.toggle("a", b.dataset.n == active);
+      });
+
+      if (RN[id]) RN[id]();
+      $("app").querySelector(".s.on").scrollTop = 0;
+    }
+
+    document.addEventListener("click", function (e) {
+      const back = e.target.closest("[data-b]");
+      if (back) go(back.dataset.b);
+      if (e.target.closest(".chg")) paySheet();
+    });
+
+    Q("nav button").forEach(function (b) {
+      b.onclick = function () {
+        go(b.dataset.n);
+      };
+    });
+
+    function err(message) {
+      $("le").textContent = message;
+    }
+
+    function norm(value) {
+      value = value.trim();
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
+        return value.toLowerCase();
+      }
+      const digits = value.replace(/[\s-]/g, "");
+      if (/^(\+63|63|0)9\d{9}$/.test(digits)) {
+        return "0" + digits.slice(-10);
+      }
+      return "";
+    }
+
+    Q(".tab").forEach(function (tab, i) {
+      tab.onclick = function () {
+        reg = i == 1;
+        Q(".tab").forEach(function (x, j) {
+          x.classList.toggle("on", j == i);
+        });
+        $("nm").parentNode.style.display = reg ? "" : "none";
+        $("li").textContent = reg ? "Create account" : "Log in";
+        $("roles").style.display = reg ? "" : "none";
+        pickRole("passenger");
+        err("");
+      };
+    });
+
+    function pickRole(role) {
+      regRole = role;
+      Q("#roles .chip").forEach(function (chip) {
+        chip.classList.toggle("sel", chip.dataset.role == role);
+      });
+    }
+    Q("#roles .chip").forEach(function (chip) {
+      chip.onclick = function () {
+        pickRole(chip.dataset.role);
+      };
+    });
+
+    function start(id, name) {
+      const acc = (st.get("gr_acc") || {})[id] || {};
+      U = { id: id, n: name, role: acc.role || "passenger" };
+      J = null;
+      st.set("gr_sess", id);
+      D = st.get("gr_d_" + id) || { hist: [], notes: [], unread: 0, pm: { t: "Cash", label: "Cash" } };
+      P = { pick: DEF, dest: "", type: "", km: 0 };
+      R = null;
+      clearT();
+      $("u").value = $("pw").value = $("nm").value = $("ge").value = "";
+      err("");
+      if (!D.earn) D.earn = [];
+      if (U.role == "driver") {
+        go("dhome");
+      } else {
+        go("home");
+      }
+    }
+
+    $("li").onclick = function () {
+      const id = norm($("u").value);
+      const pw = $("pw").value;
+      const accounts = st.get("gr_acc") || {};
+
+      if (!id) return err("Please enter a valid phone number or email.");
+      if (!pw) return err("Please enter your password.");
+
+      if (reg) {
+        const name = $("nm").value.trim();
+        if (!name) return err("Please enter your name.");
+        if (pw.length < 6) return err("Password must be at least 6 characters.");
+        if (accounts[id]) return err("This account already exists. Tap Log in.");
+        accounts[id] = { n: name, pw: pw, role: regRole };
+        st.set("gr_acc", accounts);
+        start(id, name);
+        toast("Welcome to GoRide, " + name.split(" ")[0]);
+      } else {
+        const acc = accounts[id];
+        if (!acc) return err("No account found. Tap Register to create one.");
+        if (acc.pw !== pw) return err("Incorrect password. Please try again.");
+        start(id, acc.n);
+      }
+    };
+
+    Q("#login input").forEach(function (input) {
+      input.onkeydown = function (e) {
+        if (e.key != "Enter") return;
+        const googleOpen = $("gw").style.display != "none";
+        if (googleOpen && input.id == "ge") {
+          $("gg").click();
+        } else {
+          $("li").click();
+        }
+      };
+    });
+
+    $("gg").onclick = function () {
+      if ($("gw").style.display == "none") {
+        $("gw").style.display = "";
+        $("ge").focus();
+        return;
+      }
+
+      const id = norm($("ge").value);
+      if (!id || !id.includes("@")) return err("Please enter a valid Google email.");
+
+      const accounts = st.get("gr_acc") || {};
+      if (!accounts[id]) {
+        const first = id.split("@")[0];
+        accounts[id] = {
+          n: first.charAt(0).toUpperCase() + first.slice(1),
+          pw: Math.random().toString(36)
+        };
+        st.set("gr_acc", accounts);
+      }
+      $("gw").style.display = "none";
+      start(id, accounts[id].n);
+    };
+
+    function rHome() {
+      $("hi").textContent = "Hi, " + U.n.split(" ")[0];
+      $("dot").style.display = D.unread ? "block" : "none";
+      $("mapH").innerHTML = MAP(pin(70, 140, "#1d5c46", "You"));
+
+      const scheduled = D.hist.filter(function (h) {
+        return h.st == "Scheduled";
+      }).length;
+
+      let html = "";
+      if (R) {
+        html = `<button class="c act" data-b="track"><b>Ride in progress</b><small>${esc($("eta").textContent)} · Tap to view</small></button>`;
+      } else if (scheduled) {
+        const s = scheduled > 1 ? "s" : "";
+        html = `<button class="c act" data-b="pay" style="background:#fff;border-color:var(--line)"><b>${scheduled} scheduled ride${s}</b><small>Tap to view</small></button>`;
+      }
+      $("act").innerHTML = html;
+    }
+
+    $("wtg").onclick = function () {
+      if (R) {
+        toast("You already have a ride in progress.");
+        go("track");
+      } else {
+        go("loc");
+      }
+    };
+
+    $("bell").onclick = function () {
+      D.unread = 0;
+      save();
+      $("dot").style.display = "none";
+
+      let html = "<h3>Notifications</h3>";
+      if (D.notes.length) {
+        for (const n of D.notes) {
+          html += `<div class="c"><b style="font-weight:600">${esc(n.m)}</b><small>${when(n.w)}</small></div>`;
+        }
+      } else {
+        html += `<div class="mut">No notifications yet.</div>`;
+      }
+      sheet(html);
+    };
+
+    $("mn").onclick = function () {
+      sheet(`<h3>${esc(U.n)}</h3><button class="b o" id="m1">Profile</button><button class="b o" id="m2">Payment and Rides</button><button class="b o" id="m3">Log out</button>`);
+      $("m1").onclick = function () {
+        shut();
+        go("prof");
+      };
+      $("m2").onclick = function () {
+        shut();
+        go("pay");
+      };
+      $("m3").onclick = function () {
+        shut();
+        logout();
+      };
+    };
+
+    function logout() {
+      if (R || J) return toast("Finish or cancel your current ride first.");
+      st.set("gr_sess", null);
+      U = D = null;
+      online = false;
+      req = null;
+      clearT();
+      go("login");
+    }
+
+    function rLoc() {
+      $("pk").value = P.pick;
+      $("ds").value = P.dest;
+      $("lerr").textContent = "";
+      upd();
+    }
+
+    function upd() {
+      const pick = $("pk").value.trim();
+      const dest = $("ds").value.trim();
+      const ok = pick && dest && pick.toLowerCase() != dest.toLowerCase();
+
+      let map = "";
+      if (ok) map += rt(RT);
+      map += pin(70, 140, "#1d5c46", "Pick up");
+      if (dest) map += pin(240, 40, "#f4b52c", "Destination");
+      $("mapL").innerHTML = MAP(map);
+
+      $("ld").textContent = ok ? `Estimated distance: ${tripKm(pick, dest)} km` : "";
+    }
+
+    $("pk").oninput = upd;
+    $("ds").oninput = upd;
+
+    $("cl").onclick = function () {
+      const pick = $("pk").value.trim();
+      const dest = $("ds").value.trim();
+
+      function showError(message) {
+        $("lerr").textContent = message;
+      }
+
+      if (!/[a-z0-9]/i.test(pick)) return showError("Please enter a valid pick up location.");
+      if (!/[a-z0-9]/i.test(dest)) return showError("Please enter a valid destination.");
+      if (pick.toLowerCase() == dest.toLowerCase()) return showError("Pick up and destination can't be the same place.");
+
+      P.pick = pick;
+      P.dest = dest;
+      P.km = tripKm(pick, dest);
+      toast("Location confirmed");
+      go("type");
+    };
+
+    function mins() {
+      return 2 + P.km * 3;
+    }
+    function rType() {
+      $("tsum").innerHTML = `<small>${esc(P.pick)}</small><b>→ ${esc(P.dest)}</b><small>${P.km} km · about ${mins()} min</small>`;
+
+      let html = "";
+      for (const name in TY) {
+        const ride = TY[name];
+        let cls = "opt";
+        if (P.type == name) {
+          cls = "opt sel";
+        }
+        html += `<button class="${cls}" data-t="${name}" aria-pressed="${P.type == name}">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ride.icon}</svg>
+          <div style="flex:1"><b>${name} · ${seatText(ride.s)}</b><small>${ride.d}</small></div>
+          <b class="pr">₱${fare(name)}</b>
+        </button>`;
+      }
+      $("opts").innerHTML = html;
+
+      Q(".opt").forEach(function (button) {
+        button.onclick = function () {
+          P.type = button.dataset.t;
+          rType();
+        };
+      });
+      $("ct").disabled = !P.type;
+    }
+    $("ct").onclick=()=>go("conf");
+
+    function drvH(type) {
+      return `<div class="av">M</div><div><b>${DRV.n}</b><small>★ ${DRV.r}/5 · ${TY[type].v}</small></div>`;
+    }
+
+    function routeH() {
+      return `<div class="stop"><span class="dt p"></span><div><small>Pick up</small><b>${esc(P.pick)}</b></div></div><div class="stop"><span class="dt d"></span><div><small>Destination · ${P.km} km</small><b>${esc(P.dest)}</b></div></div>`;
+    }
+
+    function rideH() {
+      return `<div><small>Ride type</small><b>${P.type} · ${seatText(TY[P.type].s)}</b></div><b class="pr">₱${fare(P.type)}</b>`;
+    }
+
+    function rConf() {
+      $("cdrv").innerHTML = drvH(P.type);
+      $("croute").innerHTML = routeH() + `<button class="lk" data-b="loc">Edit locations</button>`;
+      $("cride").innerHTML = rideH();
+      $("cpay").innerHTML = `<div><small>Payment</small><b>${esc(pmL())}</b></div><button class="lk chg">Change</button>`;
+    }
+
+    $("sr").onclick = function () {
+      go("sched");
+    };
+
+    $("cr").onclick = function () {
+      R = { pick: P.pick, dest: P.dest, km: P.km, type: P.type, fee: fare(P.type), ph: "s", chat: [] };
+      note("Ride confirmed. Searching for a driver.");
+      toast("Ride confirmed");
+
+      $("mapT").innerHTML = MAP(pin(70, 140, "#1d5c46", "You"));
+      $("eta").textContent = "Searching for an available driver…";
+      $("eta").className = "eta pulse";
+      $("sub").textContent = "This only takes a few seconds.";
+      $("tdrv").style.display = "none";
+      $("tbtn").style.display = "none";
+      $("cx").style.display = "";
+      go("track");
+      setT(found, 2800);
+    };
+
+    function p2(x) {
+      return String(x).padStart(2, "0");
+    }
+
+    function ymd(d) {
+      return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+    }
+
+    function rSched() {
+      const soon = new Date(Date.now() + 36e5);
+      $("dt").min = ymd(new Date());
+      if (!$("dt").value) $("dt").value = ymd(soon);
+      if (!$("tm").value) $("tm").value = p2(soon.getHours()) + ":00";
+      $("se").textContent = "";
+      $("sroute").innerHTML = routeH();
+      $("sride").innerHTML = rideH();
+    }
+
+    $("ss").onclick = function () {
+      const date = new Date($("dt").value + "T" + $("tm").value);
+      if (isNaN(date) || date <= Date.now()) {
+        $("se").textContent = "Please choose a date and time in the future.";
+        return;
+      }
+
+      D.hist.unshift({
+        id: Date.now(),
+        t: P.dest,
+        pick: P.pick,
+        km: P.km,
+        fee: fare(P.type),
+        type: P.type,
+        st: "Scheduled",
+        when: +date,
+        pm: pmL()
+      });
+      note("Ride scheduled for " + when(date));
+      save();
+      toast("Ride scheduled for " + when(date));
+      $("dt").value = $("tm").value = "";
+      go("pay");
+    };
+
+    function found() {
+      R.ph = "c";
+      $("eta").className = "eta";
+      $("tdrv").innerHTML = drvH(R.type);
+      $("tdrv").style.display = "";
+      $("tbtn").style.display = "";
+      toast("Driver found: " + DRV.n);
+      note(DRV.n + " accepted your ride.");
+
+      $("mapT").innerHTML = MAP(rt(RD) + pin(70, 140, "#1d5c46", "You") + veh(RD[0][0], RD[0][1]));
+      anim(RD, 9000, function (t) {
+        $("eta").textContent = "Arriving in " + Math.max(1, Math.ceil(5 * (1 - t))) + " min";
+        $("sub").textContent = (2.5 * (1 - t)).toFixed(1) + " km away";
+      }, arrive);
+    }
+
+    function arrive() {
+      R.ph = "a";
+      $("cx").style.display = "none";
+      $("eta").textContent = "Your driver has arrived";
+      $("sub").textContent = "Your trip starts in a moment.";
+      toast("Your driver has arrived");
+      note(DRV.n + " has arrived.");
+      setT(trip, 3500);
+    }
+
+    function trip() {
+      R.ph = "t";
+      $("mapT").innerHTML = MAP(rt(RT) + pin(240, 40, "#f4b52c", "Drop-off") + veh(RT[0][0], RT[0][1]));
+      const total = mins();
+      toast("Trip started");
+      anim(RT, 9000, function (t) {
+        $("eta").textContent = "On the way · " + Math.max(1, Math.ceil(total * (1 - t))) + " min left";
+        $("sub").textContent = (R.km * (1 - t)).toFixed(1) + " km to " + R.dest;
+      }, finish);
+    }
+
+    function finish() {
+      D.hist.unshift({
+        id: Date.now(),
+        t: R.dest,
+        pick: R.pick,
+        km: R.km,
+        fee: R.fee,
+        type: R.type,
+        st: "Completed",
+        when: Date.now(),
+        pm: pmL()
+      });
+      note(`Trip complete. ₱${R.fee} paid via ${pmL()}.`);
+      R = null;
+      P.dest = "";
+      P.type = "";
+      save();
+      toast("You have arrived. Payment completed.");
+      go("pay");
+    }
+
+    $("cx").onclick = function () {
+      ask("Cancel this ride?", "Cancel ride", function () {
+        clearT();
+        D.hist.unshift({
+          id: Date.now(),
+          t: R.dest,
+          pick: R.pick,
+          km: R.km,
+          fee: R.fee,
+          type: R.type,
+          st: "Cancelled",
+          when: Date.now(),
+          pm: pmL()
+        });
+        R = null;
+        P.dest = "";
+        P.type = "";
+        note("You cancelled your ride.");
+        toast("Ride cancelled. You were not charged.");
+        go("home");
+      });
+    };
+
+    $("call").onclick = function () {
+      let seconds = 0;
+      sheet(`<h3>Calling ${DRV.n}…</h3><div class="eta" id="cd">00:00</div><button class="b" id="end">End call</button>`);
+
+      const timer = setInterval(function () {
+        seconds++;
+        if ($("cd")) $("cd").textContent = "00:" + p2(seconds);
+      }, 1000);
+
+      $("end").onclick = function () {
+        clearInterval(timer);
+        shut();
+      };
+      $("ov").addEventListener("click", function () {
+        clearInterval(timer);
+      }, { once: true });
+    };
+
+    function drawChat() {
+      let messages = "";
+      for (const m of R.chat) {
+        messages += `<div class="m${m.me ? " me" : ""}">${esc(m.t)}</div>`;
+      }
+      if (!messages) messages = '<div class="mut">No messages yet.</div>';
+
+      sheet(`<h3>Message ${DRV.n.split(" ")[0]}</h3><div class="chat" id="cb">${messages}</div><div class="row2" style="grid-template-columns:1fr auto"><input id="mi" placeholder="Type a message"><button class="b" id="sd">Send</button></div>`);
+      $("sd").onclick = sendMessage;
+      $("mi").onkeydown = function (e) {
+        if (e.key == "Enter") sendMessage();
+      };
+      $("mi").focus();
+    }
+
+    function sendMessage() {
+      const text = $("mi").value.trim();
+      if (!text) return;
+
+      R.chat.push({ me: 1, t: text });
+      drawChat();
+
+      setTimeout(function () {
+        if (R) {
+          const replies = ["Okay, noted!", "On my way.", "See you shortly."];
+          R.chat.push({ t: replies[R.chat.length % 3] });
+          if ($("cb")) drawChat();
+        }
+      }, 1200);
+    }
+
+    $("msg").onclick = drawChat;
+
+    function paySheet() {
+      let type = D.pm.t;
+
+      function draw() {
+        let html = "<h3>Payment method</h3>";
+        for (const x of ["GCash", "Cash", "Card"]) {
+          const cls = x == type ? "opt sel" : "opt";
+          html += `<button class="${cls}" data-x="${x}"><b>${x}</b></button>`;
+        }
+        if (type != "Cash") {
+          const label = type == "GCash" ? "GCash mobile number" : "Card number";
+          const value = D.pm.t == type ? D.pm.raw || "" : "";
+          html += `<label class="f">${label}<input id="pn" inputmode="numeric" value="${esc(value)}"></label>`;
+        }
+        html += `<div class="er" id="pe"></div><button class="b" id="ps">Save</button>`;
+        sheet(html);
+
+        Q("#sh [data-x]").forEach(function (b) {
+          b.onclick = function () {
+            type = b.dataset.x;
+            draw();
+          };
+        });
+        $("ps").onclick = savePayment;
+      }
+
+      function savePayment() {
+        const method = { t: type, label: "Cash" };
+
+        if (type != "Cash") {
+          const raw = $("pn").value.replace(/[\s-]/g, "");
+          if (type == "GCash") {
+            if (!/^(\+63|63|0)9\d{9}$/.test(raw)) {
+              $("pe").textContent = "Please enter a valid GCash number (e.g. 09171234567).";
+              return;
+            }
+            method.label = "GCash: 63+09•••••••" + raw.slice(-2);
+          } else {
+            if (!/^\d{13,19}$/.test(raw)) {
+              $("pe").textContent = "Please enter a valid card number (13–19 digits).";
+              return;
+            }
+            method.label = "Card ending " + raw.slice(-4);
+          }
+          method.raw = $("pn").value;
+        }
+
+        D.pm = method;
+        save();
+        shut();
+        toast("Payment method: " + method.label);
+
+        const active = Q(".s.on")[0].id;
+        if (RN[active]) RN[active]();
+      }
+
+      draw();
+    }
+
+    function rPay() {
+      $("pm").innerHTML = `<b>${esc(pmL())}</b><button class="lk chg">Change</button>`;
+
+      const last = D.hist.find(function (h) {
+        return h.st == "Completed" || h.st == "Refund requested";
+      });
+      if (last) {
+        const rows = [
+          ["Trip", esc(last.t)],
+          ["Distance", last.km + " km"],
+          ["Fee", "₱" + last.fee],
+          ["Driver", DRV.n],
+          ["Paid with", esc(last.pm)]
+        ];
+        let html = "";
+        for (const r of rows) {
+          html += `<div class="rw" style="padding:5px 0"><span class="mut">${r[0]}</span><b style="text-align:right">${r[1]}</b></div>`;
+        }
+        $("sum").innerHTML = html;
+      } else {
+        $("sum").innerHTML = `<div class="mut">No completed rides yet.</div>`;
+      }
+
+      const unrated = D.hist.find(function (h) {
+        return h.st == "Completed" && !h.rated;
+      });
+      $("rr").style.display = unrated ? "" : "none";
+      if (unrated) $("rr").dataset.id = unrated.id;
+
+      if (D.hist.length == 0) {
+        $("hist").innerHTML = `<div class="mut">No rides yet. Book your first ride from Home.</div>`;
+        return;
+      }
+      let list = "";
+      for (const h of D.hist) {
+        const rated = h.rated ? " · ★ " + h.rated : "";
+        const tagClass = h.st.split(" ")[0];
+
+        let buttons = "";
+        if (h.st == "Scheduled") {
+          buttons += `<button class="lk" data-a="cx" data-id="${h.id}">Cancel ride</button>`;
+        }
+        if (h.st == "Completed" && h.pm != "Cash") {
+          buttons += `<button class="lk" data-a="rf" data-id="${h.id}">Request refund</button>`;
+        }
+        if (h.st == "Completed" && !h.rated) {
+          buttons += `<button class="lk" data-a="rt" data-id="${h.id}">Rate</button>`;
+        }
+
+        list += `<div class="c"><div class="rw"><div><b>${esc(h.t)}</b><small>${h.km} km · ₱${h.fee} · ${when(h.when)}${rated}</small></div><span class="tg ${tagClass}">${h.st}</span></div>
+     ${buttons}</div>`;
+      }
+      $("hist").innerHTML = list;
+    }
+
+    $("hist").onclick = function (e) {
+      const button = e.target.closest("[data-a]");
+      if (!button) return;
+
+      const ride = D.hist.find(function (x) {
+        return x.id == button.dataset.id;
+      });
+      const action = button.dataset.a;
+
+      if (action == "cx") {
+        ask("Cancel this scheduled ride?", "Cancel ride", function () {
+          ride.st = "Cancelled";
+          save();
+          toast("Scheduled ride cancelled");
+          rPay();
+        });
+      }
+      if (action == "rf") {
+        ask(`Request a refund of ₱${ride.fee}?`, "Request refund", function () {
+          ride.st = "Refund requested";
+          save();
+          note(`Refund of ₱${ride.fee} requested.`);
+          toast("Refund requested. We'll notify you.");
+          rPay();
+        });
+      }
+      if (action == "rt") {
+        rid = ride.id;
+        go("rate");
+      }
+    };
+
+    $("rr").onclick = function () {
+      rid = +$("rr").dataset.id;
+      go("rate");
+    };
+
+    function stars() {
+      let html = "";
+      for (let i = 0; i < 5; i++) {
+        let fill = 0;
+        if (rv >= i + 1) {
+          fill = 100;
+        } else if (rv >= i + 0.5) {
+          fill = 50;
+        }
+        html += `<span class="st" data-i="${i}" style="--f:${fill}%">★</span>`;
+      }
+      $("stars").innerHTML = html;
+    }
+
+    $("stars").onclick = function (e) {
+      const star = e.target.closest(".st");
+      if (!star) return;
+      const box = star.getBoundingClientRect();
+      const leftHalf = e.clientX - box.left < box.width / 2;
+      rv = +star.dataset.i + (leftHalf ? 0.5 : 1);
+      stars();
+    };
+
+    function rRate() {
+      rv = 0;
+      stars();
+      Q(".chip").forEach(function (c) {
+        c.classList.remove("sel");
+      });
+      $("cm").value = $("ct2").value = "";
+      $("ct2").style.display = "none";
+      $("re").textContent = "";
+
+      const ride = D.hist.find(function (x) {
+        return x.id == rid;
+      }) || { type: "Car" };
+      const ty = TY[ride.type] || TY.Car;
+      $("rdrv").innerHTML = `<div class="av">M</div><div><b>${DRV.n}</b><small>${seatText(ty.s)} · ${ty.v}</small></div>`;
+    }
+
+    Q("#tags .chip").forEach(function (chip) {
+      chip.onclick = function () {
+        chip.classList.toggle("sel");
+      };
+    });
+
+    Q("#tips .chip").forEach(function (chip) {
+      chip.onclick = function () {
+        const turnOn = !chip.classList.contains("sel");
+        Q("#tips .chip").forEach(function (x) {
+          x.classList.remove("sel");
+        });
+        chip.classList.toggle("sel", turnOn);
+        const custom = turnOn && chip.dataset.v == "c";
+        $("ct2").style.display = custom ? "" : "none";
+      };
+    });
+
+    $("sb").onclick = function () {
+      if (!rv) {
+        $("re").textContent = "Please tap a star to rate your ride.";
+        return;
+      }
+
+      const chip = Q("#tips .chip.sel")[0];
+      let tip = 0;
+      if (chip) {
+        tip = chip.dataset.v == "c" ? +$("ct2").value : +chip.dataset.v;
+        if (!(tip > 0)) {
+          $("re").textContent = "Please enter a valid tip amount.";
+          return;
+        }
+      }
+
+      const ride = D.hist.find(function (x) {
+        return x.id == rid;
+      });
+      if (ride) {
+        ride.rated = rv;
+        ride.tip = tip;
+        ride.tags = Q("#tags .chip.sel").map(function (x) {
+          return x.textContent;
+        });
+        ride.cm = $("cm").value.trim();
+      }
+      save();
+
+      let message = `Thanks! You rated ${rv}/5`;
+      if (tip) message += ` and tipped ₱${tip}`;
+      toast(message);
+      go("home");
+    };
+
+    function rDHome() {
+      $("dhi").textContent = "Hi, " + U.n.split(" ")[0];
+      $("mapD").innerHTML = MAP(pin(250, 30, "#17211c", "You"));
+      drawDriverStatus();
+    }
+
+    function drawDriverStatus() {
+      if (online) {
+        $("dst").textContent = "You are online";
+        if (req) {
+          $("dsub").textContent = "You have a new ride request";
+        } else {
+          $("dsub").textContent = "Waiting for ride requests…";
+        }
+        $("don").textContent = "Go offline";
+      } else {
+        $("dst").textContent = "You are offline";
+        $("dsub").textContent = "Go online to get ride requests";
+        $("don").textContent = "Go online";
+      }
+      drawRequest();
+    }
+
+    $("don").onclick = function () {
+      online = !online;
+      req = null;
+      clearT();
+      if (online) {
+        setT(newRequest, 2500);
+      }
+      drawDriverStatus();
+    };
+
+    function newRequest() {
+      if (!online || req || J) {
+        return;
+      }
+      const places = Object.keys(PLACES);
+      const types = Object.keys(TY);
+      const pick = places[Math.floor(Math.random() * places.length)];
+      let dest = pick;
+      while (dest == pick) {
+        dest = places[Math.floor(Math.random() * places.length)];
+      }
+      const type = types[Math.floor(Math.random() * types.length)];
+      const km = tripKm(pick, dest);
+      req = {
+        who: NAMES[Math.floor(Math.random() * NAMES.length)],
+        pick: pick,
+        dest: dest,
+        type: type,
+        km: km,
+        fee: fare(type, km)
+      };
+      toast("New ride request");
+      if ($("dhome").classList.contains("on")) {
+        drawDriverStatus();
+      }
+    }
+
+    function drawRequest() {
+      if (!req) {
+        $("req").innerHTML = "";
+        return;
+      }
+      $("req").innerHTML = `<div class="c col"><h3>New ride request</h3>
+        <div class="drv"><div class="av">${req.who[0]}</div><div><b>${req.who}</b><small>★ 4.8/5</small></div></div>
+        <div class="stop"><span class="dt p"></span><div><small>Pick up</small><b>${esc(req.pick)}</b></div></div>
+        <div class="stop"><span class="dt d"></span><div><small>Destination · ${req.km} km</small><b>${esc(req.dest)}</b></div></div>
+        <div class="rw"><span class="mut">${req.type} · ${seatText(TY[req.type].s)}</span><b class="pr">₱${req.fee}</b></div>
+        <div class="row2"><button class="b o" id="dec">Decline</button><button class="b" id="acc">Accept</button></div></div>`;
+      $("dec").onclick = declineRequest;
+      $("acc").onclick = acceptRequest;
+    }
+
+    function declineRequest() {
+      req = null;
+      toast("Request declined");
+      drawDriverStatus();
+      setT(newRequest, 3000);
+    }
+
+    function acceptRequest() {
+      J = req;
+      req = null;
+      clearT();
+      toast("Ride accepted");
+      go("dnav");
+    }
+
+    function rNav() {
+      $("npass").innerHTML = `<div class="av">${J.who[0]}</div><div><b>${J.who}</b><small>${esc(J.pick)} → ${esc(J.dest)}</small></div>`;
+      $("ndone").disabled = true;
+      $("mapN").innerHTML = MAP(rt(RD) + pin(70, 140, "#1d5c46", "Pickup") + veh(RD[0][0], RD[0][1]));
+      anim(RD, 9000, function (t) {
+        $("neta").textContent = "Arriving at pickup in " + Math.max(1, Math.ceil(5 * (1 - t))) + " min";
+        $("nsub").textContent = (2.5 * (1 - t)).toFixed(1) + " km to passenger";
+      }, pickedUp);
+    }
+
+    function pickedUp() {
+      $("neta").textContent = "Passenger picked up";
+      $("nsub").textContent = "Heading to " + J.dest;
+      toast("Passenger picked up");
+      setT(driveToDestination, 2500);
+    }
+
+    function driveToDestination() {
+      $("mapN").innerHTML = MAP(rt(RT) + pin(240, 40, "#f4b52c", "Drop-off") + veh(RT[0][0], RT[0][1]));
+      const total = 2 + J.km * 3;
+      anim(RT, 9000, function (t) {
+        $("neta").textContent = "On the way · " + Math.max(1, Math.ceil(total * (1 - t))) + " min left";
+        $("nsub").textContent = (J.km * (1 - t)).toFixed(1) + " km to " + J.dest;
+      }, arrivedAtDropoff);
+    }
+
+    function arrivedAtDropoff() {
+      $("neta").textContent = "You have arrived";
+      $("nsub").textContent = "Tap Complete Ride to finish the trip.";
+      $("ndone").disabled = false;
+    }
+
+    $("ndone").onclick = function () {
+      D.earn.unshift({ id: Date.now(), t: J.dest, who: J.who, km: J.km, fee: J.fee, when: Date.now() });
+      save();
+      toast("Ride completed. You earned ₱" + J.fee);
+      J = null;
+      go("dearn");
+      setT(newRequest, 4000);
+    };
+
+    function rEarn() {
+      let total = 0;
+      for (const e of D.earn) {
+        total += e.fee;
+      }
+      let count = D.earn.length + " completed ride";
+      if (D.earn.length != 1) {
+        count += "s";
+      }
+      $("etot").innerHTML = `<small>Total earnings</small><div class="eta">₱${total}</div><small>${count}</small>`;
+
+      if (D.earn.length == 0) {
+        $("elist").innerHTML = '<div class="mut">No completed rides yet. Go online to get requests.</div>';
+        return;
+      }
+      let html = "";
+      for (const e of D.earn) {
+        html += `<div class="c rw"><div><b>${esc(e.t)}</b><small>${esc(e.who)} · ${e.km} km · ${when(e.when)}</small></div><b class="pr">+₱${e.fee}</b></div>`;
+      }
+      $("elist").innerHTML = html;
+    }
+
+    function rProf() {
+      $("ppm").style.display = U.role == "driver" ? "none" : "";
+      $("pinfo").innerHTML = `<div class="av">${esc(U.n[0].toUpperCase())}</div><div><b>${esc(U.n)}</b><small>${esc(U.id)}</small></div>`;
+      $("ppm").innerHTML = `<div><small>Payment method</small><b>${esc(pmL())}</b></div><button class="lk chg">Change</button>`;
+
+      let count;
+      if (U.role == "driver") {
+        count = D.earn.length;
+      } else {
+        count = D.hist.filter(function (h) {
+          return h.st == "Completed";
+        }).length;
+      }
+      $("pcnt").innerHTML = `<div><small>Completed rides</small><b>${count}</b></div>`;
+    }
+
+    $("lo").onclick = logout;
+
+    const savedSession = st.get("gr_sess");
+    const savedAccounts = st.get("gr_acc") || {};
+    if (savedSession && savedAccounts[savedSession]) {
+      start(savedSession, savedAccounts[savedSession].n);
+    }
+
+  </script>
+</body>
+</html>

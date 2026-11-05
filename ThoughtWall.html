@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ThoughtWall</title>
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #e0c9a6;
+  --header: #c9a876;
+  --dark: #6b4423;
+  --mid: #8b5e34;
+  --line: #c9a876;
+  --card: #ffffff;
+  --text: #4a3f35;
+  --soft: #e8d5b7;
+  --heart: #a0522d;
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+button,
+input,
+textarea {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  background-color: var(--header);
+  z-index: 10;
+}
+
+button {
+  border: 2px solid var(--dark);
+  background-color: var(--line);
+  color: var(--text);
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--mid);
+  color: #fff;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  border: 2px solid var(--dark);
+  background-color: var(--card);
+  color: var(--text);
+  padding: 7px;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  height: 90px;
+  resize: vertical;
+}
+
+#welcome {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  background-color: var(--header);
+  text-align: center;
+  padding: 20vh 20px 0 20px;
+}
+
+#welcome h1 {
+  font-size: 40px;
+  color: var(--dark);
+  margin-bottom: 10px;
+}
+
+#welcome p {
+  margin-bottom: 14px;
+}
+
+#enterButton {
+  display: none;
+  margin-top: 16px;
+  font-size: 16px;
+}
+
+header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 11;
+  background-color: var(--header);
+  border-bottom: 2px solid var(--dark);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 22px;
+  color: var(--dark);
+}
+
+header button {
+  margin-left: 6px;
+}
+
+header button.active {
+  background-color: var(--dark);
+  color: var(--bg);
+}
+
+main {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 20px 14px 50px 14px;
+}
+
+.box {
+  background-color: var(--card);
+  border: 2px solid var(--dark);
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.box label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+h2 {
+  font-size: 18px;
+  color: var(--dark);
+  margin-bottom: 12px;
+}
+
+.post-top {
+  margin-bottom: 8px;
+}
+
+.nick {
+  font-weight: bold;
+  color: var(--dark);
+}
+
+.small {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.post-text {
+  line-height: 1.5;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+
+.icons {
+  border-top: 1px dashed var(--mid);
+  padding-top: 8px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 0;
+  font-size: 14px;
+}
+
+.icon-button:hover {
+  background: none;
+  color: var(--text);
+}
+
+.icon-button svg {
+  width: 22px;
+  height: 22px;
+}
+
+.heart path {
+  fill: none;
+  stroke: var(--heart);
+  stroke-width: 2.2;
+}
+
+.icon-button:hover .heart path,
+.icon-button.liked .heart path {
+  fill: var(--heart);
+}
+
+.bubble path {
+  fill: none;
+  stroke: var(--mid);
+  stroke-width: 2.2;
+}
+
+.icon-button:hover .bubble path {
+  fill: var(--mid);
+}
+
+.comment {
+  background-color: var(--soft);
+  padding: 6px 10px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.comment b {
+  color: var(--dark);
+  margin-right: 5px;
+}
+
+.comment-form {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.comment-form input[type="text"] {
+  margin-bottom: 0;
+  padding: 6px;
+  font-size: 13px;
+}
+
+.comment-form .nick-input {
+  width: 110px;
+  flex: none;
+}
+
+.row {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 30px 0;
+  opacity: 0.7;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 10px 12px;
+  }
+
+  header h1 {
+    font-size: 18px;
+  }
+
+  header button {
+    margin-left: 4px;
+    padding: 6px 10px;
+  }
+
+  #welcome h1 {
+    font-size: 30px;
+  }
+
+  main {
+    padding: 16px 10px 40px 10px;
+  }
+
+  .box {
+    padding: 12px;
+  }
+
+  input[type="text"],
+  textarea,
+  .comment-form input[type="text"] {
+    font-size: 16px;
+  }
+
+  .comment-form {
+    flex-direction: column;
+  }
+
+  .comment-form .nick-input {
+    width: 100%;
+  }
+
+  .comment-form button {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="welcome">
+  <h1>ThoughtWall</h1>
+  <p>a place to share your ideas, life stuff, and thoughts.</p>
+  <p>no account needed. just pick a nickname.</p>
+  <progress id="bar" value="0" max="100"></progress>
+  <p id="loadingText">loading... 0%</p>
+  <button id="enterButton">enter</button>
+</div>
+
+<header>
+  <h1>ThoughtWall</h1>
+  <nav>
+    <button id="homeTab" class="active" onclick="showPage('home')">Home</button>
+    <button id="historyTab" onclick="showPage('history')">History</button>
+  </nav>
+</header>
+
+<main>
+
+  <div id="homePage">
+    <div class="box">
+      <label for="nicknameInput">nickname (what should we call you?)</label>
+      <input type="text" id="nicknameInput" placeholder="e.g. Unknown, Overthinker, Normal Human...">
+
+      <label for="postInput">what is on your mind?</label>
+      <textarea id="postInput" placeholder="share an idea, an experience, or a reflection"></textarea>
+
+      <button onclick="addPost()">Post</button>
+    </div>
+
+    <h2>The Wall</h2>
+    <div id="postList"></div>
+  </div>
+
+  <div id="historyPage" class="hidden">
+    <h2>History</h2>
+    <div class="box" id="historyList"></div>
+  </div>
+
+</main>
+
+<script>
+var posts = [];
+
+try {
+  var saved = localStorage.getItem("thoughtwall_posts");
+  if (saved) {
+    posts = JSON.parse(saved);
+  }
+} catch (error) {
+  posts = [];
+}
+
+function savePosts() {
+  try {
+    localStorage.setItem("thoughtwall_posts", JSON.stringify(posts));
+  } catch (error) {
+  }
+}
+
+function escapeText(text) {
+  var div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function heartIcon() {
+  return '<svg class="heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.5-9C0.8 8.4 2.2 5 5.5 5c2 0 3.3 1.2 4 2.3C10.2 6.2 11.5 5 13.5 5 16.8 5 18.2 8.4 16.5 12 14 16.4 12 21 12 21z"/></svg>';
+}
+
+function commentIcon() {
+  return '<svg class="bubble" viewBox="0 0 24 24"><path d="M3 5 h18 v11 h-11 l-4 4 v-4 h-3 z"/></svg>';
+}
+
+function makeCard(post) {
+  var html = '<div class="box">';
+  html += '<div class="post-top"><span class="nick">' + escapeText(post.nickname) + '</span> <span class="small">' + post.date + ' at ' + post.time + '</span></div>';
+  html += '<div class="post-text">' + escapeText(post.content) + '</div>';
+
+  html += '<div class="icons">';
+  html += '<button class="icon-button ' + (post.liked ? 'liked' : '') + '" onclick="toggleLike(' + post.id + ')">' + heartIcon() + '<span>' + post.likes + '</span></button>';
+  html += '<span class="icon-button">' + commentIcon() + '<span>' + post.comments.length + '</span></span>';
+  html += '</div>';
+
+  for (var i = 0; i < post.comments.length; i++) {
+    html += '<div class="comment"><b>' + escapeText(post.comments[i].nickname) + '</b>' + escapeText(post.comments[i].text) + '</div>';
+  }
+
+  html += '<div class="comment-form">';
+  html += '<input type="text" class="nick-input" id="commentNick_' + post.id + '" placeholder="nickname">';
+  html += '<input type="text" id="commentText_' + post.id + '" placeholder="write a comment">';
+  html += '<button onclick="addComment(' + post.id + ')">Send</button>';
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function renderHome() {
+  var list = document.getElementById("postList");
+  if (posts.length === 0) {
+    list.innerHTML = '<p class="empty">nothing here yet. be the first to post.</p>';
+    return;
+  }
+  var html = "";
+  for (var i = 0; i < posts.length; i++) {
+    html += makeCard(posts[i]);
+  }
+  list.innerHTML = html;
+}
+
+function renderHistory() {
+  var list = document.getElementById("historyList");
+  if (posts.length === 0) {
+    list.innerHTML = '<p class="empty">no history yet.</p>';
+    return;
+  }
+  var html = "";
+  for (var i = 0; i < posts.length; i++) {
+    var post = posts[i];
+    var shortText = post.content;
+    if (shortText.length > 80) {
+      shortText = shortText.substring(0, 80) + "...";
+    }
+    html += '<div class="row">';
+    html += '<span class="nick">' + escapeText(post.nickname) + '</span> <span class="small">' + post.date + ' at ' + post.time + '</span>';
+    html += '<p>' + escapeText(shortText) + '</p>';
+    html += '<span class="small">' + post.likes + ' likes, ' + post.comments.length + ' comments</span>';
+    html += '</div>';
+  }
+  list.innerHTML = html;
+}
+
+function showPage(page) {
+  if (page === "home") {
+    document.getElementById("homePage").classList.remove("hidden");
+    document.getElementById("historyPage").classList.add("hidden");
+    document.getElementById("homeTab").classList.add("active");
+    document.getElementById("historyTab").classList.remove("active");
+    renderHome();
+  } else {
+    document.getElementById("homePage").classList.add("hidden");
+    document.getElementById("historyPage").classList.remove("hidden");
+    document.getElementById("homeTab").classList.remove("active");
+    document.getElementById("historyTab").classList.add("active");
+    renderHistory();
+  }
+}
+
+function addPost() {
+  var nickname = document.getElementById("nicknameInput").value.trim();
+  var postBox = document.getElementById("postInput");
+  var content = postBox.value.trim();
+
+  if (nickname === "") {
+    nickname = "Anonymous";
+  }
+  if (content === "") {
+    alert("write something first");
+    return;
+  }
+
+  var now = new Date();
+
+  posts.unshift({
+    id: Date.now(),
+    nickname: nickname,
+    content: content,
+    date: now.toLocaleDateString(),
+    time: now.toLocaleTimeString(),
+    likes: 0,
+    liked: false,
+    comments: []
+  });
+
+  savePosts();
+  postBox.value = "";
+  renderHome();
+}
+
+function toggleLike(postId) {
+  for (var i = 0; i < posts.length; i++) {
+    if (posts[i].id === postId) {
+      if (posts[i].liked) {
+        posts[i].likes = posts[i].likes - 1;
+        posts[i].liked = false;
+      } else {
+        posts[i].likes = posts[i].likes + 1;
+        posts[i].liked = true;
+      }
+    }
+  }
+  savePosts();
+  renderHome();
+}
+
+function addComment(postId) {
+  var nickname = document.getElementById("commentNick_" + postId).value.trim();
+  var text = document.getElementById("commentText_" + postId).value.trim();
+
+  if (nickname === "") {
+    nickname = "Anonymous";
+  }
+  if (text === "") {
+    return;
+  }
+
+  for (var i = 0; i < posts.length; i++) {
+    if (posts[i].id === postId) {
+      posts[i].comments.push({ nickname: nickname, text: text });
+    }
+  }
+
+  savePosts();
+  renderHome();
+}
+
+var percent = 0;
+var enterButton = document.getElementById("enterButton");
+
+var timer = setInterval(function () {
+  percent = percent + 4;
+  document.getElementById("bar").value = percent;
+  if (percent >= 100) {
+    clearInterval(timer);
+    document.getElementById("loadingText").textContent = "ready!";
+    enterButton.style.display = "inline-block";
+  } else {
+    document.getElementById("loadingText").textContent = "loading... " + percent + "%";
+  }
+}, 80);
+
+enterButton.onclick = function () {
+  document.getElementById("welcome").style.display = "none";
+};
+
+renderHome();
+</script>
+
+</body>
+</html>

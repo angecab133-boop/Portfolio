@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Expense Tracker</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  background-image: repeating-linear-gradient(to bottom, transparent, transparent 29px, #dddddd 30px);
+  color: #222222;
+  padding: 30px 14px 50px 14px;
+}
+
+.paper {
+  max-width: 760px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border: 2px solid #2e7d5b;
+  padding: 24px;
+}
+
+h1 {
+  font-size: 28px;
+  color: #2e7d5b;
+  margin-bottom: 6px;
+}
+
+.sub {
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input,
+select,
+textarea {
+  display: block;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  padding: 7px;
+  border: 1px solid #999999;
+  background-color: #ffffff;
+  color: #222222;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #2e7d5b;
+  border-color: #2e7d5b;
+}
+
+.top-boxes,
+.bottom-boxes {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.top-boxes label,
+.bottom-boxes label {
+  flex: 1;
+  min-width: 180px;
+}
+
+.top-boxes input,
+.bottom-boxes input {
+  margin-top: 5px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #2e7d5b;
+  color: #ffffff;
+  text-align: left;
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid #2e7d5b;
+}
+
+td {
+  border: 1px solid #bbbbbb;
+  padding: 4px;
+}
+
+tbody {
+  counter-reset: rownumber;
+}
+
+tbody tr {
+  counter-increment: rownumber;
+}
+
+tbody tr:hover {
+  background-color: #eef7f2;
+}
+
+.num {
+  width: 46px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.num::before {
+  content: counter(rownumber);
+}
+
+td input,
+td select {
+  border: none;
+  background-color: transparent;
+  padding: 6px;
+}
+
+td input:focus,
+td select:focus {
+  background-color: #ffffff;
+}
+
+textarea {
+  height: 90px;
+  margin-top: 5px;
+  resize: vertical;
+}
+
+.notes {
+  margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="paper">
+
+  <h1>My Expense Tracker</h1>
+  <p class="sub">Write down what you spend so you know where your money goes. Fill in the table, then add up the amounts and write your total at the bottom.</p>
+
+  <div class="top-boxes">
+    <label>Month
+      <input type="month">
+    </label>
+    <label>Money I have this month
+      <input type="number" min="0" step="0.01" placeholder="0.00">
+    </label>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Date</th>
+          <th>What I bought</th>
+          <th>Category</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text" placeholder="e.g. lunch"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+        <tr>
+          <td class="num"></td>
+          <td><input type="date"></td>
+          <td><input type="text"></td>
+          <td>
+            <select>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>School</option>
+              <option>Shopping</option>
+              <option>Bills</option>
+              <option>Other</option>
+            </select>
+          </td>
+          <td><input type="number" min="0" step="0.01" placeholder="0.00"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="bottom-boxes">
+    <label>Total spent
+      <input type="number" min="0" step="0.01" placeholder="0.00">
+    </label>
+    <label>Money left
+      <input type="number" step="0.01" placeholder="0.00">
+    </label>
+  </div>
+
+  <label class="notes">Notes
+    <textarea placeholder="Anything you want to remember about your spending"></textarea>
+  </label>
+
+</div>
+
+</body>
+</html>
