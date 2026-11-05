@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://accweb-basedportfolio.netlify.app/sitemap.xml
+Sitemap: https://portfolio-angelinecabrera.netlify.app/sitemap.xml
